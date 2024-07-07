@@ -828,19 +828,7 @@ echo "net.ipv4.tcp_rmem=4096 87380 6291456" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_wmem=4096 16384 6291456" >> /etc/sysctl.conf
 sysctl -p
 
-delete_file_if_exists $script_log_file;
-check_startup_parameters;
-check_ipv6;
-if is_proxyserver_installed; then
-  echo -e "Proxy server already installed, reconfiguring:\n";
-else
-  configure_ipv6;
-  install_requred_packages;
-  install_3proxy;
-fi;
-backconnect_ipv4=$(get_backconnect_ipv4);
-generate_random_users_if_needed;
-
+mkdir $proxy_dir
 # Array with allowed symbols in hex (in ipv6 addresses)
 array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
 
@@ -864,10 +852,22 @@ count=1
 # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
 while [ "$count" -le $proxy_count ]
 do
-  rnd_subnet_ip >> "$random_ipv6_list_file";
+  rnd_subnet_ip >> $random_ipv6_list_file;
   ((count+=1))
 done;
 
+delete_file_if_exists $script_log_file;
+check_startup_parameters;
+check_ipv6;
+if is_proxyserver_installed; then
+  echo -e "Proxy server already installed, reconfiguring:\n";
+else
+  configure_ipv6;
+  install_requred_packages;
+  install_3proxy;
+fi;
+backconnect_ipv4=$(get_backconnect_ipv4);
+generate_random_users_if_needed;
 create_startup_script;
 add_to_cron;
 open_ufw_backconnect_ports;
