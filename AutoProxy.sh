@@ -562,37 +562,43 @@ function create_startup_script() {
     reference="\$(echo "\$reference" | sed 's/^[[:space:]]*//')"
   }
 
+  # Save old 3proxy daemon pids, if exists
+  proxyserver_process_pids=()
+  while read -r pid; do
+    proxyserver_process_pids+=(\$pid)
+  done < <(ps -ef | awk '/[3]proxy/{print $2}');
+
   # Save old IPv6 addresses in temporary file to delete from interface after rotating
-  #old_ipv6_list_file="/root/proxyserver/ipv6.list.old"
-  #if test -f /root/proxyserver/ipv6.list;
-  #  then cp /root/proxyserver/ipv6.list $old_ipv6_list_file;
-  #  rm /root/proxyserver/ipv6.list;
+  #old_ipv6_list_file="$random_ipv6_list_file.old"
+  #if test -f $random_ipv6_list_file;
+  #  then cp $random_ipv6_list_file \$old_ipv6_list_file;
+  #  rm $random_ipv6_list_file;
   #fi;
-  #
-  ## Array with allowed symbols in hex (in ipv6 addresses)
+
+  # Array with allowed symbols in hex (in ipv6 addresses)
   #array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
-  #
-  ## Generate random hex symbol
-  #function rh () { echo ${array[$RANDOM%16]}; }
-  #
+
+  # Generate random hex symbol
+  #function rh () { echo \${array[\$RANDOM%16]}; }
+
   #rnd_subnet_ip () {
-  #  echo -n 2a03:f80:33:6fa4;
-  #  symbol=64
-  #  while (( $symbol < 128)); do
-  #    if (($symbol % 16 == 0)); then echo -n :; fi;
-  #    echo -n $(rh);
+  #  echo -n $(get_subnet_mask);
+  #  symbol=$subnet
+  #  while (( \$symbol < 128)); do
+  #    if ((\$symbol % 16 == 0)); then echo -n :; fi;
+  #    echo -n \$(rh);
   #    let "symbol += 4";
   #  done;
   #  echo ;
   #}
-  #
-  ## Temporary variable to count generated ip's in cycle
+
+  # Temporary variable to count generated ip's in cycle
   #count=1
-  #
-  ## Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
-  #while [ "$count" -le 2000 ]
+
+  # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
+  #while [ "\$count" -le $proxy_count ]
   #do
-  #  rnd_subnet_ip >> /root/proxyserver/ipv6.list;
+  #  rnd_subnet_ip >> $random_ipv6_list_file;
   #  ((count+=1))
   #done;
 
@@ -659,7 +665,7 @@ function create_startup_script() {
 
   # Remove old random ip list after running new 3proxy instance
   #if test -f \$old_ipv6_list_file; then
-  #  # Remove old ips from interface
+    # Remove old ips from interface
   #  for ipv6_address in \$(cat \$old_ipv6_list_file); do ip -6 addr del \$ipv6_address dev $interface_name; done;
   #  rm \$old_ipv6_list_file;
   #fi;
@@ -710,6 +716,13 @@ function open_ufw_backconnect_ports() {
 }
 
 function run_proxy_server() {
+  # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
+  while [ "\$count" -le $proxy_count ]
+  do
+    rnd_subnet_ip >> $random_ipv6_list_file;
+    ((count+=1))
+  done;
+  
   if [ ! -f $startup_script_path ]; then log_err_and_exit "Error: proxy startup script doesn't exist."; fi;
 
   chmod +x $startup_script_path;
