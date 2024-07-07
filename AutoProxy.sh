@@ -828,7 +828,7 @@ echo "net.ipv4.tcp_rmem=4096 87380 6291456" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_wmem=4096 16384 6291456" >> /etc/sysctl.conf
 sysctl -p
 
-delete_file_if_exists $script_log_file;
+#delete_file_if_exists $script_log_file;
 check_startup_parameters;
 check_ipv6;
 if is_proxyserver_installed; then
@@ -840,9 +840,6 @@ else
 fi;
 backconnect_ipv4=$(get_backconnect_ipv4);
 generate_random_users_if_needed;
-create_startup_script;
-add_to_cron;
-open_ufw_backconnect_ports;
 
 # Array with allowed symbols in hex (in ipv6 addresses)
 array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
@@ -871,6 +868,9 @@ do
   ((count+=1))
 done;
 
+create_startup_script;
+add_to_cron;
+open_ufw_backconnect_ports;
 run_proxy_server;
 write_backconnect_proxies_to_file;
 write_proxyserver_info;
