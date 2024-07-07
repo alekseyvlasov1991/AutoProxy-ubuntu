@@ -137,7 +137,7 @@ echo "Выбранный тип прокси: $proxies_type"
 get_user_input
 # Имитируем установку с анимированным прогрессом
 echo "Установка началась. Ожидайте..."
-(sleep 10)  # Имитируем процесс установки задержкой в 10 секунд
+#(sleep 10)  # Имитируем процесс установки задержкой в 10 секунд
 
 # Перенаправляем весь вывод в лог-файл
 exec > /var/tmp/ipv6-proxy-server-install.log 2>&1
@@ -835,14 +835,14 @@ array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
 function rh () { echo \${array[\$RANDOM%16]}; }
 
 rnd_subnet_ip () {
-  echo -n $(get_subnet_mask);
+  subnet=$(get_subnet_mask)
   symbol=$subnet
-  while (( \$symbol < 128)); do
-    if ((\$symbol % 16 == 0)); then echo -n :; fi;
-    echo -n \$(rh);
-    let "symbol += 4";
-  done;
-  echo ;
+  while (( $symbol < 128 )); do
+    if (( $symbol % 16 == 0 )); then echo -n :; fi
+    echo -n $(rh)
+    let "symbol += 4"
+  done
+  echo
 }
 
 # Temporary variable to count generated ip's in cycle
