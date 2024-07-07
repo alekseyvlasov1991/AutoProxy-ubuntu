@@ -864,7 +864,7 @@ count=1
 # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
 while [ "$count" -le $proxy_count ]
 do
-  rnd_subnet_ip >> $(random_ipv6_list_file);
+  rnd_subnet_ip >> "$random_ipv6_list_file";
   ((count+=1))
 done;
 
