@@ -839,7 +839,7 @@ rnd_subnet_ip () {
   symbol=$subnet
   while (( $symbol < 128 )); do
     if (( $symbol % 16 == 0 )); then echo -n :; fi
-    #echo -n $(rh)
+    
     let "symbol += 4"
   done
   echo
