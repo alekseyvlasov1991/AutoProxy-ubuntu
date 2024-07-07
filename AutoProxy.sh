@@ -196,7 +196,7 @@ eval set -- "$options"
 # Set default values for optional arguments
 subnet=${subnet:-64}
 proxies_type=${proxies_type:-"socks5"}
-start_port=30000
+start_port=50001
 rotating_interval=${rotating_interval:-0}
 use_localhost=false
 use_random_auth=${use_random_auth:-false}
