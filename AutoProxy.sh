@@ -140,7 +140,7 @@ echo "Установка началась. Ожидайте..."
 #(sleep 10)  # Имитируем процесс установки задержкой в 10 секунд
 
 # Перенаправляем весь вывод в лог-файл
-exec > /var/tmp/ipv6-proxy-server-install.log 2>&1
+#exec > /var/tmp/ipv6-proxy-server-install.log 2>&1
 
 # Убедитесь, что все необходимые утилиты установлены
 required_packages=("openssl" "zip" "curl" "jq")
