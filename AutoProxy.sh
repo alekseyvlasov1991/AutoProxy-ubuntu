@@ -716,13 +716,7 @@ function open_ufw_backconnect_ports() {
 }
 
 function run_proxy_server() {
-  # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
-  while [ "\$count" -le $proxy_count ]
-  do
-    rnd_subnet_ip >> $random_ipv6_list_file;
-    ((count+=1))
-  done;
-  
+
   if [ ! -f $startup_script_path ]; then log_err_and_exit "Error: proxy startup script doesn't exist."; fi;
 
   chmod +x $startup_script_path;
@@ -833,6 +827,13 @@ echo "net.ipv4.tcp_keepalive_time=7200" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_rmem=4096 87380 6291456" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_wmem=4096 16384 6291456" >> /etc/sysctl.conf
 sysctl -p
+
+# Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
+while [ "\$count" -le $proxy_count ]
+do
+  rnd_subnet_ip >> $random_ipv6_list_file;
+  ((count+=1))
+done;
 
 delete_file_if_exists $script_log_file;
 check_startup_parameters;
