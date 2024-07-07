@@ -839,17 +839,18 @@ rnd_subnet_ip () {
   symbol=$subnet
   while (( $symbol < 128 )); do
     if (( $symbol % 16 == 0 )); then echo -n :; fi
-    
+    echo -n $(rh)
     let "symbol += 4"
   done
   echo
 }
 
+
 # Temporary variable to count generated ip's in cycle
 count=1
 
 # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
-while [ "\$count" -le $proxy_count ]
+while [ $count -le $proxy_count ]
 do
   rnd_subnet_ip >> $random_ipv6_list_file;
   ((count+=1))
