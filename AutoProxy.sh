@@ -832,29 +832,29 @@ sysctl -p
 array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
 
 # Generate random hex symbol
-function rh () { echo \${array[\$RANDOM%16]}; }
+function rh () { echo ${array[$RANDOM%16]}; }
 
 rnd_subnet_ip () {
-  subnet=$(get_subnet_mask)
+  echo -n $(get_subnet_mask)
   symbol=$subnet
-  while (( $symbol < 128 )); do
-    if (( $symbol % 16 == 0 )); then echo -n :; fi
-    echo -n $(rh)
-    let "symbol += 4"
-  done
-  echo
+  while (( $symbol < 128)); do
+    if (($symbol % 16 == 0)); then echo -n :; fi;
+    echo -n $(rh);
+    let "symbol += 4";
+  done;
+  echo ;
 }
-
 
 # Temporary variable to count generated ip's in cycle
 count=1
 
 # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
-while [ $count -le $proxy_count ]
+while [ "$count" -le 2000 ]
 do
   rnd_subnet_ip >> $random_ipv6_list_file;
   ((count+=1))
 done;
+
 
 delete_file_if_exists $script_log_file;
 check_startup_parameters;
