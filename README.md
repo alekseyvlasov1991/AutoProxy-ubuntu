@@ -1,1 +1,2 @@
 # AutoProxy
+Ubuntu
