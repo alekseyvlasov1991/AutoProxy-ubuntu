@@ -137,10 +137,10 @@ echo "Выбранный тип прокси: $proxies_type"
 get_user_input
 # Имитируем установку с анимированным прогрессом
 echo "Установка началась. Ожидайте..."
-#(sleep 10)  # Имитируем процесс установки задержкой в 10 секунд
+(sleep 10)  # Имитируем процесс установки задержкой в 10 секунд
 
 # Перенаправляем весь вывод в лог-файл
-#exec > /var/tmp/ipv6-proxy-server-install.log 2>&1
+exec > /var/tmp/ipv6-proxy-server-install.log 2>&1
 
 # Убедитесь, что все необходимые утилиты установлены
 required_packages=("openssl" "zip" "curl" "jq")
@@ -359,7 +359,7 @@ function remove_ipv6_addresses_from_iface() {
   if test -f $random_ipv6_list_file; then
     # Remove old ips from interface
     for ipv6_address in $(cat $random_ipv6_list_file); do ip -6 addr del $ipv6_address dev $interface_name; done;
-    rm $random_ipv6_list_file;
+    #rm $random_ipv6_list_file;
   fi;
 }
 
