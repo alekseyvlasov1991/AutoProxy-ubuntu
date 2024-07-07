@@ -847,6 +847,8 @@ array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
 # Generate random hex symbol
 function rh () { echo ${array[$RANDOM%16]}; }
 
+directtt=$random_ipv6_list_file
+
 rnd_subnet_ip () {
   echo -n $(get_subnet_mask);
   symbol=$subnet
@@ -864,7 +866,7 @@ count=1
 # Generate random 'proxy_count' ipv6 of specified subnet and write it to 'ip.list' file
 while [ "$count" -le $proxy_count ]
 do
-  rnd_subnet_ip >> $random_ipv6_list_file;
+  rnd_subnet_ip >> $directtt;
   ((count+=1))
 done;
 
